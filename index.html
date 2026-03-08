@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>骨影慧诊 - 基于视频驱动的髋关节综合智能量化分析平台</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS变量定义 */
+    :root {
+      --primary-color: #165DFF;
+      --secondary-color1: #F53F3F;
+      --secondary-color2: #FF7D00;
+      --text-color: #1D2129;
+      --text-secondary: #86909C;
+      --bg-color: #FFFFFF;
+      --bg-section: #F2F3F5;
+      --border-color: #E5E6EB;
+      --transition: all 0.3s ease;
+    }
+
+    /* 全局样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", "Source Han Sans", sans-serif;
+      color: var(--text-color);
+      line-height: 1.8;
+    }
+
+    /* 顶部导航 */
+    .nav-bar {
+      position: fixed;
+      top: -30px;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 12px 0;
+      transition: var(--transition);
+      background-color: transparent;
+    }
+
+    .nav-bar.scrolled {
+      background-color: rgba(78, 104, 157, 0.95);
+      padding: 10px -200px 0px 0px;
+      height: 150px;
+    }
+
+    .nav-bar.scrolled .nav-link {
+      color: white;
+    }
+
+    .nav-bar.scrolled .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-bar.scrolled .contact-text {
+      color: white;
+    }
+
+    .nav-bar.scrolled .contact-icon {
+      color: white;
+    }
+
+    .nav-bar.scrolled .contact-icon:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+      padding-top: 10px;
+    }
+
+    .logo {
+      width: 300px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 0;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-item {
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 18px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-link.active {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    .nav-bar.scrolled .nav-link.active {
+      color: var(--primary-color);
+    }
+
+    .contact-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-right: -150px;
+    }
+
+    .contact-text {
+      font-size: 16px;
+      color: var(--text-color);
+    }
+
+    .contact-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .contact-icon {
+      font-size: 24px;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+
+    .contact-icon:hover {
+      color: var(--primary-color);
+    }
+
+    /* 首屏 */
+    #home {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: url('img/主页背景1.png') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+
+    .home-content {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .home-text {
+      text-align: left;
+      flex: 1;
+    }
+
+    .home-title {
+      font-size: 72px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .home-subtitle {
+      font-size: 24px;
+      color: var(--text-color);
+    }
+
+
+
+
+
+    .scroll-down {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--primary-color);
+      border-left: none;
+      border-top: none;
+      transform: translateX(-50%) rotate(45deg);
+      animation: float 1s ease-in-out infinite;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .scroll-down:hover {
+      animation: float-large 1s ease-in-out infinite;
+      border-color: var(--secondary-color2);
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateX(-50%) rotate(45deg) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) rotate(45deg) translateY(10px);
+      }
+    }
+
+    @keyframes float-large {
+
+      0%,
+      100% {
+        transform: translateX(-50%) rotate(45deg) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) rotate(45deg) translateY(20px);
+      }
+    }
+
+    /* 通用板块样式 */
+    .section {
+      padding: 80px 0;
+      position: relative;
+    }
+
+    .section-bg {
+      background-color: var(--bg-section);
+    }
+
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title-img {
+      display: block;
+      height: 120px;
+      width: auto;
+      margin: 0 auto 20px;
+      object-fit: contain;
+    }
+
+    .section-divider {
+      width: 100px;
+      height: 2px;
+      background-color: var(--primary-color);
+      margin: 0 auto 40px;
+    }
+
+    /* 项目介绍  */
+    #intro {
+      background: #ffffff;
+      padding: 100px 0;
+    }
+
+    #intro .section-divider {
+      background: linear-gradient(90deg, transparent, #165DFF, transparent);
+      height: 2px;
+      width: 150px;
+      margin-bottom: 40px;
+    }
+
+    .intro-subtitle {
+      font-size: 28px;
+      font-weight: bold;
+      color: #165DFF;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .intro-cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .intro-card {
+      width: 380px;
+      background-color: #ffffff;
+      border: 1px solid #E5E6EB;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px #E5E6EB;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px #DCDFE6;
+    }
+
+    .intro-card-title {
+      font-size: 20px;
+      font-weight: bold;
+      padding-left: 8px;
+      border-left: 2px solid;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .title-pain {
+      color: #F53F3F;
+      border-color: #F53F3F;
+    }
+
+    .title-advantage {
+      color: #165DFF;
+      border-color: #165DFF;
+    }
+
+    .title-roadmap {
+      color: #FF7D00;
+      border-color: #FF7D00;
+    }
+
+    .intro-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .intro-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.6;
+    }
+
+    .intro-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .card-pain .intro-icon {
+      color: #F53F3F;
+    }
+
+    .card-advantage .intro-icon {
+      color: #165DFF;
+    }
+
+    .card-roadmap .intro-icon {
+      color: #FF7D00;
+    }
+
+    .intro-text {
+      font-size: 16px;
+      color: #1D2129;
+      flex: 1;
+    }
+
+    .intro-highlight {
+      color: #165DFF;
+      font-weight: bold;
+    }
+
+    .intro-card-gradient {
+      height: 3px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .gradient-pain {
+      background: linear-gradient(90deg, #F53F3F 0%, #F53F3F 100%);
+    }
+
+    .gradient-advantage {
+      background: linear-gradient(90deg, #165DFF 0%, #165DFF 100%);
+    }
+
+    .gradient-roadmap {
+      background: linear-gradient(90deg, #FF7D00 0%, #FF7D00 100%);
+    }
+
+    /* 核心技术 */
+    #tech {
+      background-color: #e6f0ff;
+    }
+
+    .tech-cards {
+      max-width: 1160px;
+      margin: 0 auto 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .tech-card-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .tech-card-row:nth-child(2) {
+      margin-left: 20px;
+    }
+
+    .tech-card {
+      width: 320px;
+      height: 220px;
+      background-color: #ffffff;
+      border: 1px solid #E5E6EB;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #E5E6EB;
+      padding: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px #DCDFE6;
+    }
+
+    .tech-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #165DFF;
+      text-align: center;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .tech-card-body {
+      display: flex;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .tech-card-icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #165DFF;
+      font-size: 28px;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .tech-card:hover .tech-card-icon {
+      transform: rotate(10deg);
+      color: #0F4CD0;
+    }
+
+    .tech-card-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .tech-card-tech {
+      font-size: 13px;
+      color: #1D2129;
+      margin: 0;
+    }
+
+    .tech-card-value {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1D2129;
+      margin: 0;
+    }
+
+    .tech-highlight {
+      color: #FFD700;
+      font-weight: bold;
+    }
+
+    .tech-card-tag {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      width: 80px;
+      height: 25px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover .tech-card-tag {
+      transform: scale(1.05);
+    }
+
+    .tag-blue {
+      background-color: #E8F3FF;
+      color: #165DFF;
+    }
+
+    .tag-green {
+      background-color: #E6F7EF;
+      color: #2DD4BF;
+    }
+
+    .tag-orange {
+      background-color: #FFF0E6;
+      color: #FF7D00;
+    }
+
+    .tag-purple {
+      background-color: #F3E6FF;
+      color: #9C27B0;
+    }
+
+    .tag-yellow {
+      background-color: #FFF7E6;
+      color: #FF9800;
+    }
+
+    .tech-pipeline {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .pipeline-switcher {
+      position: relative;
+      width: 1160px;
+      height: 500px;
+      margin: 30px auto;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .pipeline-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      border-radius: 8px;
+    }
+
+    .pipeline-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+
+    .pipeline-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .pipeline-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .pipeline-item.active {
+      opacity: 1;
+    }
+
+    .pipeline-left {
+      flex: 0 0 450px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      padding-left: 180px;
+      position: relative;
+    }
+
+    .pipeline-left.wide {
+      flex: 0 0 550px;
+    }
+
+    .pipeline-left.wide .pipeline-desc {
+      max-width: 480px;
+    }
+
+    .pipeline-number-img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      position: absolute;
+      top: -120px;
+      left: 40px;
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    .pipeline-stage-title {
+      font-size: 56px;
+      font-weight: bold;
+      color: #ffffff;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+      margin-top: 40px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .pipeline-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #3971f4;
+      text-align: left;
+      margin-top: 15px;
+      max-width: 380px;
+      font-weight: 500;
+    }
+
+    .pipeline-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pipeline-main-img {
+      width: 480px;
+      height: 320px;
+      object-fit: contain;
+    }
+
+    .pipeline-controls {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+    }
+
+    .pipeline-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      color: #165DFF;
+      font-size: 18px;
+    }
+
+    .pipeline-btn:hover {
+      background: rgba(255, 255, 255, 1);
+      color: #FF7D00;
+    }
+
+    .pipeline-btn:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    .pipeline-prev {
+      left: 20px;
+    }
+
+    .pipeline-next {
+      right: 20px;
+    }
+
+    .pipeline-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+    }
+
+    .pipeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #86909C;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pipeline-dot.active {
+      background: #165DFF;
+    }
+
+    .pipeline-dot:hover {
+      background: #165DFF;
+    }
+
+    .tech-description {
+      text-align: center;
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 30px;
+    }
+
+    /* 项目展示 */
+    #show {
+      background-color: var(--bg-section);
+      padding: 100px 0;
+    }
+
+    .model-showcase {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .model-section-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .model-viewer-container {
+      background-color: var(--bg-color);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .model-canvas {
+      width: 100%;
+      height: 450px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      position: relative;
+    }
+
+    .model-canvas canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .model-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .model-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background-color: #ffffff;
+      color: var(--text-color);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .model-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .model-btn.active {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border-color: var(--primary-color);
+    }
+
+    .model-info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .model-info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+
+    .model-info-item i {
+      color: var(--primary-color);
+      font-size: 18px;
+    }
+
+    /* 关于我们 */
+    #about {
+      background-color: #e6f0ff;
+    }
+
+    .about-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-column {
+      background-color: var(--bg-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px var(--border-color);
+      padding: 30px;
+      transition: var(--transition);
+    }
+
+    .about-column:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px #DCDFE6;
+    }
+
+    .about-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .about-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 8px;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    .about-content {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-color);
+    }
+
+    /* 页脚 */
+    footer {
+      background-color: var(--primary-color);
+      height: 120px;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      color: white;
+    }
+
+    .footer-main-text {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .footer-secondary-text {
+      font-size: 14px;
+    }
+
+    .footer-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-button {
+      width: 120px;
+      height: 40px;
+      background-color: white;
+      color: var(--primary-color);
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .footer-button:hover {
+      background-color: var(--secondary-color2);
+      color: white;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 1200px) {
+
+      .nav-container,
+      .section-container {
+        padding: 0 20px;
+      }
+
+      .home-content {
+        padding: 0 20px;
+      }
+
+      .image-placeholder {
+        width: 600px;
+        height: 450px;
+      }
+
+      .home-footer,
+      .home-divider {
+        width: 90%;
+      }
+
+      .intro-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tech-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .tech-pipeline {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .about-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        gap: 20px;
+      }
+
+      .nav-link {
+        font-size: 16px;
+      }
+
+      .home-title {
+        font-size: 48px;
+      }
+
+      .home-subtitle {
+        font-size: 18px;
+      }
+
+      .home-content {
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        max-width: 400px;
+        height: 300px;
+      }
+
+      .tech-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .intro-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+  </style>
+  <!-- Three.js for 3D Model Display -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+</head>
+
+<body>
+  <!-- 顶部导航 -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <a href="#home" class="logo"><img src="img/logo.png" alt="骨影慧诊"
+          style="width: 300px; height: 150px; object-fit: contain;"></a>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="#home" class="nav-link active">主页</a></li>
+        <li class="nav-item"><a href="#intro" class="nav-link">项目介绍</a></li>
+        <li class="nav-item"><a href="#tech" class="nav-link">核心技术</a></li>
+        <li class="nav-item"><a href="#show" class="nav-link">项目展示</a></li>
+        <li class="nav-item"><a href="#about" class="nav-link">关于我们</a></li>
+      </ul>
+      <div class="contact-section">
+        <span class="contact-text">联系我们</span>
+        <div class="contact-icons">
+          <i class="fab fa-weixin contact-icon"></i>
+          <i class="fas fa-envelope contact-icon"></i>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主页 -->
+  <section id="home">
+    <div class="home-content">
+      <div class="home-text">
+        <h1 class="home-title">骨影慧诊</h1>
+        <p class="home-subtitle">——基于视频驱动的髋关节综合智能量化分析平台</p>
+      </div>
+    </div>
+    <div class="scroll-down" onclick="scrollToSection('intro')"></div>
+  </section>
+
+  <!-- 项目介绍 -->
+  <section id="intro" class="section section-bg">
+    <div class="section-container">
+      <img src="img/2.png" alt="项目介绍" class="section-title-img">
+      <div class="section-divider"></div>
+      <h3 class="intro-subtitle">突破传统影像诊断的静态局限，实现“ 视频驱动 + AI分析 + 动态评估 ”的髋关节智能诊疗新模式</h3>
+      <div class="intro-cards">
+        <!-- 卡片1：市场痛点 -->
+        <div class="intro-card card-pain">
+          <h3 class="intro-card-title title-pain">市场痛点</h3>
+          <div class="intro-card-content">
+            <div class="intro-item">
+              <i class="fas fa-exclamation-triangle intro-icon"></i>
+              <span class="intro-text"><strong>诊断维度失配：</strong>静态影像CT/MRI无法捕捉运动中的骨骼撞击，陷入“病动诊静”的困境。
+              </span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-money-bill-wave intro-icon"></i>
+              <span class="intro-text"><strong>动捕设备昂贵：</strong>红外步态系统成本高达百万，基层医院无力承担，动态评估难以普及。</span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-balance-scale intro-icon"></i>
+              <span class="intro-text"><strong>手术代价沉重：</strong>15%-20%术后效果不佳，患者承受3-5万元手术费，还面临二次手术与医保浪费。</span>
+            </div>
+          </div>
+          <div class="intro-card-gradient gradient-pain"></div>
+        </div>
+
+        <!-- 卡片2：核心优势 -->
+        <div class="intro-card card-advantage">
+          <h3 class="intro-card-title title-advantage">核心优势</h3>
+          <div class="intro-card-content">
+            <div class="intro-item">
+              <i class="fas fa-person-running intro-icon"></i>
+              <span class="intro-text"><strong>低成本智能诊断：</strong>基于<span
+                  class="intro-highlight">SSM统计形态模型</span>的股骨-髋臼形态偏差评估，AI自动识别高风险撞击区域，提高FAI早期筛查与诊断效率。</span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-camera intro-icon"></i>
+              <span class="intro-text"><strong>精准手术规划：</strong>三维个性化手术切除规划，术前虚拟模拟不同切除方案，
+                <span class="intro-highlight">自动计算切除体积与风险区域，</span>帮助医生制定精准手术策略。</span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-brain intro-icon"></i>
+              <span class="intro-text"><strong>动态功能评估：</strong>视频驱动的动态功能分析，分析不同姿态下髋关节撞击情况， <span
+                  class="intro-highlight">实时监测活动范围与异常接触，</span>评估术后功能恢复与康复效果。</span>
+            </div>
+          </div>
+          <div class="intro-card-gradient gradient-advantage"></div>
+        </div>
+
+        <!-- 卡片3：发展规划 -->
+        <div class="intro-card card-roadmap">
+          <h3 class="intro-card-title title-roadmap">发展规划</h3>
+          <div class="intro-card-content">
+            <div class="intro-item">
+              <i class="fas fa-cogs intro-icon"></i>
+              <span class="intro-text"><strong>技术打磨（2026-2028年）：</strong>优化 WHAM姿态估计算法，提高髋关节动作识别精度；建立 CT骨骼模型与运动数据配准流程；构建
+                FAI数字孪生原型系统；开发<span class="intro-highlight">原型软件平台</span>，申请<span
+                  class="intro-highlight">1-2项</span>发明专利。</span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-hospital intro-icon"></i>
+              <span class="intro-text"><strong>临床中试（2028-2030年）：</strong>与<span
+                  class="intro-highlight">3-5家</span>三甲医院开展合作，收集50-100例FAI患者数据，建立碰撞指标与术后功能恢复模型，开展前瞻性临床研究，获得二类医疗器械注册检验报告。</span>
+            </div>
+            <div class="intro-item">
+              <i class="fas fa-map-marked-alt intro-icon"></i>
+              <span
+                class="intro-text"><strong>取证推广（2030-2032年）：</strong>完成NMPA医疗器械注册，开展多中心临床试验，推动产品规模化推广，获得医疗器械注册证，覆盖<span
+                  class="intro-highlight">50+</span>三甲医院。</span>
+            </div>
+          </div>
+          <div class="intro-card-gradient gradient-roadmap"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心技术 -->
+  <section id="tech" class="section">
+    <div class="section-container">
+      <img src="img/3.png" alt="核心技术" class="section-title-img">
+      <div class="section-divider"></div>
+      <div class="tech-cards">
+        <!-- 第一行2张卡片 -->
+        <div class="tech-card-row">
+          <div class="tech-card">
+            <h3 class="tech-card-title">个体化三维骨骼重建模块</h3>
+            <div class="tech-card-body">
+              <div class="tech-card-icon">
+                <i class="fas fa-cube"></i>
+              </div>
+              <div class="tech-card-text">
+                <p class="tech-card-tech">核心技术：CT影像+<span class="tech-highlight">Mesh2SSM++</span>统计形状模型</p>
+                <p class="tech-card-value">核心价值：亚毫米级高精度骨骼三维建模，病理形态量化基准</p>
+              </div>
+            </div>
+            <span class="tech-card-tag tag-blue">三维重建</span>
+          </div>
+
+          <div class="tech-card">
+            <h3 class="tech-card-title">基于WHAM的真实运动学提取模块</h3>
+            <div class="tech-card-body">
+              <div class="tech-card-icon">
+                <i class="fas fa-video"></i>
+              </div>
+              <div class="tech-card-text">
+                <p class="tech-card-tech">核心技术：单目RGB视频+<span class="tech-highlight">WHAM</span>世界坐标系运动捕捉</p>
+                <p class="tech-card-value">核心价值：无辐射、低成本，提取完整髋关节运动学参数</p>
+              </div>
+            </div>
+            <span class="tech-card-tag tag-green">无辐射</span>
+          </div>
+        </div>
+
+        <!-- 第二行3张卡片 -->
+        <div class="tech-card-row">
+          <div class="tech-card">
+            <h3 class="tech-card-title">数字孪生驱动与动态碰撞仿真模块</h3>
+            <div class="tech-card-body">
+              <div class="tech-card-icon">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+              <div class="tech-card-text">
+                <p class="tech-card-tech">核心技术：Unity平台+<span class="tech-highlight">AABB树</span>加速碰撞检测算法</p>
+                <p class="tech-card-value">核心价值：实时仿真碰撞，精准量化碰撞区域/体积/边界线</p>
+              </div>
+            </div>
+            <span class="tech-card-tag tag-orange">动态仿真</span>
+          </div>
+
+          <div class="tech-card">
+            <h3 class="tech-card-title">AI量化分析与决策辅助模块</h3>
+            <div class="tech-card-body">
+              <div class="tech-card-icon">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="tech-card-text">
+                <p class="tech-card-tech">核心技术：机器学习+虚拟骨赘切除仿真</p>
+                <p class="tech-card-value">核心价值：FAI自动分级，术前术后疗效量化，手术规划数据支撑</p>
+              </div>
+            </div>
+            <span class="tech-card-tag tag-purple">AI决策</span>
+          </div>
+
+          <div class="tech-card">
+            <h3 class="tech-card-title">结构化数据输出与临床集成</h3>
+            <div class="tech-card-body">
+              <div class="tech-card-icon">
+                <i class="fas fa-file-medical-alt"></i>
+              </div>
+              <div class="tech-card-text">
+                <p class="tech-card-tech">核心技术：CSV结构化输出+医院信息系统接口</p>
+                <p class="tech-card-value">核心价值：数据标准化，无缝对接临床，支持后续统计分析</p>
+              </div>
+            </div>
+            <span class="tech-card-tag tag-yellow">临床集成</span>
+          </div>
+        </div>
+      </div>
+      <h3 class="section-title" style="font-size: 24px; margin-top: 60px;">FAI个体化数字孪生全链路技术管线</h3>
+      <div class="pipeline-switcher">
+        <div class="pipeline-background">
+          <img src="img/技术-背景图.png" alt="背景" class="pipeline-bg-img">
+        </div>
+
+        <div class="pipeline-content">
+          <div class="pipeline-item active" data-index="0">
+            <div class="pipeline-left">
+              <img src="img/编号 (1).png" alt="1" class="pipeline-number-img">
+              <div class="pipeline-stage-title">影像获取</div>
+              <div class="pipeline-desc">从CT影像重建高精度髋关节三维骨骼模型，奠定几何基础。</div>
+            </div>
+            <div class="pipeline-right">
+              <img src="img/技术路线 (1).png" alt="影像获取" class="pipeline-main-img">
+            </div>
+          </div>
+
+          <div class="pipeline-item" data-index="1">
+            <div class="pipeline-left">
+              <img src="img/编号 (2).png" alt="2" class="pipeline-number-img">
+              <div class="pipeline-stage-title">骨骼重建</div>
+              <div class="pipeline-desc">基于单目视频无辐射提取真实三维运动参数，驱动仿真。</div>
+            </div>
+            <div class="pipeline-right">
+              <img src="img/技术路线 (2).png" alt="骨骼重建" class="pipeline-main-img">
+            </div>
+          </div>
+
+          <div class="pipeline-item" data-index="2">
+            <div class="pipeline-left wide">
+              <img src="img/编号 (3).png" alt="3" class="pipeline-number-img">
+              <div class="pipeline-stage-title">视频运动提取</div>
+              <div class="pipeline-desc">融合骨骼与运动数据，实现髋关节动态碰撞仿真与可视化。</div>
+            </div>
+            <div class="pipeline-right">
+              <img src="img/技术路线 (3).png" alt="视频运动提取" class="pipeline-main-img">
+            </div>
+          </div>
+
+          <div class="pipeline-item" data-index="3">
+            <div class="pipeline-left">
+              <img src="img/编号 (4).png" alt="4" class="pipeline-number-img">
+              <div class="pipeline-stage-title">动态仿真</div>
+              <div class="pipeline-desc">通过AI量化分析，输出FAI分级、风险评估及手术规划建议。</div>
+            </div>
+            <div class="pipeline-right">
+              <img src="img/技术路线 (4).png" alt="动态仿真" class="pipeline-main-img">
+            </div>
+          </div>
+
+          <div class="pipeline-item" data-index="4">
+            <div class="pipeline-left">
+              <img src="img/编号 (5).png" alt="5" class="pipeline-number-img">
+              <div class="pipeline-stage-title">智能量化</div>
+              <div class="pipeline-desc">以结构化数据格式输出分析结果，便于临床集成与统计。</div>
+            </div>
+            <div class="pipeline-right">
+              <img src="img/技术路线 (5).gif" alt="智能量化" class="pipeline-main-img">
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-controls">
+          <button class="pipeline-btn pipeline-prev" onclick="prevSlide()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="pipeline-btn pipeline-next" onclick="nextSlide()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <div class="pipeline-dots">
+            <span class="pipeline-dot active" data-index="0" onclick="goToSlide(0)"></span>
+            <span class="pipeline-dot" data-index="1" onclick="goToSlide(1)"></span>
+            <span class="pipeline-dot" data-index="2" onclick="goToSlide(2)"></span>
+            <span class="pipeline-dot" data-index="3" onclick="goToSlide(3)"></span>
+            <span class="pipeline-dot" data-index="4" onclick="goToSlide(4)"></span>
+          </div>
+        </div>
+      </div>
+      <p class="tech-description">融合CT静态几何与视频动态运动，实现FAI从诊断到手术规划的全流程智能量化分析，填补动态功能评估技术空白。</p>
+    </div>
+  </section>
+
+  <!-- 项目展示 -->
+  <section id="show" class="section section-bg">
+    <div class="section-container">
+      <img src="img/4.png" alt="项目展示" class="section-title-img">
+      <div class="section-divider"></div>
+
+      <!-- 3D模型展示区域 -->
+      <div class="model-showcase">
+        <h3 class="model-section-title">高精度髋关节三维骨骼模型</h3>
+        <div class="model-viewer-container">
+          <div id="model-viewer" class="model-canvas"></div>
+          <div class="model-controls">
+            <button class="model-btn active" data-model="all">完整模型</button>
+            <button class="model-btn" data-model="pelvis">骨盆</button>
+            <button class="model-btn" data-model="left_femur">左股骨</button>
+            <button class="model-btn" data-model="right_femur">右股骨</button>
+          </div>
+        </div>
+        <div class="model-info">
+          <div class="model-info-item">
+            <i class="fas fa-cube"></i>
+            <span>基于CT影像重建的高精度三维模型</span>
+          </div>
+          <div class="model-info-item">
+            <i class="fas fa-ruler"></i>
+            <span>亚毫米级建模精度，真实还原解剖结构</span>
+          </div>
+          <div class="model-info-item">
+            <i class="fas fa-sync-alt"></i>
+            <span>支持360°旋转查看与部件分离展示</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于我们 -->
+  <section id="about" class="section">
+    <div class="section-container">
+      <img src="img/5.png" alt="关于我们" class="section-title-img">
+      <div class="section-divider"></div>
+      <div class="about-columns">
+        <div class="about-column">
+          <h3 class="about-title">多学科交叉团队</h3>
+          <p class="about-content">
+            跨学科本科生（人工智能、数学、生物、金融），获国奖等，分工明确：计算机负责算法与Unity开发，生物（iGEM金牌）负责医学理解与UI，数学负责统计建模，金融负责商业分析，形成全链条闭环。
+          </p>
+        </div>
+        <div class="about-column">
+          <h3 class="about-title">专家指导
+          </h3>
+          <p class="about-content">
+            教育部虚拟现实中心教授领衔，主持国重/863等项目，发表SCI/EI 80余篇，指导技术路线与科研训练。
+
+          </p>
+        </div>
+        <div class="about-column">
+          <h3 class="about-title">资源支撑</h3>
+          <p class="about-content">
+            实验室设备数千万（VR/3D扫描/Hololens2），与三甲医院合作，拥有髋关节CT数据支撑建模与验证。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-text">
+        <div class="footer-main-text">骨影慧诊——基于视频驱动的髋关节综合智能量化分析平台</div>
+        <div class="footer-secondary-text">骨影慧诊团队 © 2026 所有权利保留</div>
+      </div>
+      <div class="footer-buttons">
+        <button class="footer-button" onclick="scrollToSection('home')">回到顶部</button>
+        <button class="footer-button">联系我们</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动函数
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // 导航高亮和滚动效果
+    window.addEventListener('scroll', function () {
+      const sections = ['home', 'intro', 'tech', 'show', 'about'];
+      let currentSection = '';
+
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          currentSection = section;
+        }
+      });
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+          link.classList.add('active');
+        }
+      });
+
+      // 滚动时导航栏背景变化
+      const navBar = document.querySelector('.nav-bar');
+      if (window.scrollY > 50) {
+        navBar.classList.add('scrolled');
+      } else {
+        navBar.classList.remove('scrolled');
+      }
+    });
+
+    // 导航链接点击事件
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const sectionId = this.getAttribute('href').substring(1);
+        scrollToSection(sectionId);
+      });
+    });
+
+    // 滚动淡入效果
+    function checkFade() {
+      const elements = document.querySelectorAll('.card, .tech-card, .about-column');
+      elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        if (rect.top <= windowHeight * 0.8) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    }
+
+    // 初始化淡入效果
+    window.addEventListener('load', function () {
+      document.querySelectorAll('.card, .tech-card, .about-column').forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      });
+      checkFade();
+    });
+
+    // 滚动时检查淡入效果
+    window.addEventListener('scroll', checkFade);
+
+    // 技术管线图片切换功能
+    let currentSlide = 0;
+    const totalSlides = 5;
+    let autoPlayInterval;
+    const autoPlayDelay = 4000;
+
+    function showSlide(index) {
+      const items = document.querySelectorAll('.pipeline-item');
+      const dots = document.querySelectorAll('.pipeline-dot');
+
+      items.forEach((item, i) => {
+        item.classList.remove('active');
+        if (i === index) {
+          item.classList.add('active');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active');
+        if (i === index) {
+          dot.classList.add('active');
+        }
+      });
+
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      const nextIndex = (currentSlide + 1) % totalSlides;
+      showSlide(nextIndex);
+    }
+
+    function prevSlide() {
+      const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+      showSlide(prevIndex);
+    }
+
+    function goToSlide(index) {
+      showSlide(index);
+      resetAutoPlay();
+    }
+
+    function startAutoPlay() {
+      autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+    }
+
+    function stopAutoPlay() {
+      clearInterval(autoPlayInterval);
+    }
+
+    function resetAutoPlay() {
+      stopAutoPlay();
+      startAutoPlay();
+    }
+
+    // 初始化自动轮播
+    document.addEventListener('DOMContentLoaded', function () {
+      const switcher = document.querySelector('.pipeline-switcher');
+      if (switcher) {
+        switcher.addEventListener('mouseenter', stopAutoPlay);
+        switcher.addEventListener('mouseleave', startAutoPlay);
+        startAutoPlay();
+      }
+    });
+
+    // ============================================
+    // 3D模型展示功能
+    // ============================================
+    let scene, camera, renderer, controls;
+    let pelvisMesh, leftFemurMesh, rightFemurMesh;
+    let currentModel = 'all';
+
+    function init3DViewer() {
+      const container = document.getElementById('model-viewer');
+      if (!container) return;
+
+      // 创建场景
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf5f7fa);
+
+      // 创建相机
+      camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+      // 调整相机位置和旋转，实现正面视角
+      camera.position.set(0, 0.5, 15);
+      camera.lookAt(0, 0, 0);
+
+      // 创建渲染器
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      container.appendChild(renderer.domElement);
+
+      // 添加灯光
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(5, 5, 5);
+      scene.add(directionalLight);
+
+      const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+      directionalLight2.position.set(-5, -5, -5);
+      scene.add(directionalLight2);
+
+      // 添加控制器
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.rotateSpeed = 0.5;
+
+      // 加载3D模型
+      loadModels();
+
+      // 动画循环
+      animate();
+
+      // 窗口大小调整
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function loadModels() {
+      const loader = new THREE.OBJLoader();
+      const material = new THREE.MeshPhongMaterial({
+        color: 0xe8d5c4,
+        shininess: 30,
+        specular: 0x444444
+      });
+
+      // 加载骨盆模型
+      loader.load('model/pelvis.obj', function (object) {
+        object.traverse(function (child) {
+          if (child.isMesh) child.material = material;
+        });
+        object.scale.set(0.02, 0.02, 0.02);
+        object.position.set(0, 2.0, 0);
+
+        // 统一旋转
+        object.rotation.x = THREE.MathUtils.degToRad(90);
+        object.rotation.y = THREE.MathUtils.degToRad(180);
+
+        pelvisMesh = object;
+        scene.add(pelvisMesh);
+      }, undefined, function (error) {
+        console.log('骨盆模型加载失败');
+        createPlaceholderMesh('pelvis');
+      });
+
+      // 加载左股骨模型
+      loader.load('model/left_femur.obj', function (object) {
+        object.traverse(function (child) {
+          if (child.isMesh) child.material = material;
+        });
+        object.scale.set(0.02, 0.02, 0.02);
+
+        // 调整位置，让股骨“落”到骨盆上
+        object.position.set(0.3, 1.5, 0);
+        // 添加额外旋转，让股骨方向正确
+        object.rotation.z = -0.2;
+
+        // 统一旋转
+        object.rotation.x = THREE.MathUtils.degToRad(90);
+        object.rotation.y = THREE.MathUtils.degToRad(180);
+
+        leftFemurMesh = object;
+        scene.add(leftFemurMesh);
+      }, undefined, function (error) {
+        console.log('左股骨模型加载失败');
+        createPlaceholderMesh('left_femur');
+      });
+
+      // 加载右股骨模型
+      loader.load('model/right_femur.obj', function (object) {
+        object.traverse(function (child) {
+          if (child.isMesh) child.material = material;
+        });
+        object.scale.set(0.02, 0.02, 0.02);
+
+        // 调整位置，让股骨“落”到骨盆上
+        object.position.set(-0.3, 1.5, 0);
+        // 添加额外旋转，让股骨方向正确
+        object.rotation.z = 0.2;
+
+        // 统一旋转
+        object.rotation.x = THREE.MathUtils.degToRad(90);
+        object.rotation.y = THREE.MathUtils.degToRad(180);
+
+        rightFemurMesh = object;
+        scene.add(rightFemurMesh);
+      }, undefined, function (error) {
+        console.log('右股骨模型加载失败');
+        createPlaceholderMesh('right_femur');
+      });
+    }
+
+    function createPlaceholderMesh(type) {
+      const geometry = new THREE.CylinderGeometry(0.3, 0.2, 1.5, 16);
+      const material = new THREE.MeshPhongMaterial({
+        color: 0xe8d5c4,
+        shininess: 30
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      if (type === 'pelvis') {
+        mesh.scale.set(1.5, 0.5, 1);
+        mesh.position.set(0, -0.5, 0);
+        pelvisMesh = mesh;
+      } else if (type === 'left_femur') {
+        mesh.position.set(-0.8, -0.3, 0);
+        mesh.rotation.z = -0.2;
+        leftFemurMesh = mesh;
+      } else if (type === 'right_femur') {
+        mesh.position.set(0.8, -0.3, 0);
+        mesh.rotation.z = 0.2;
+        rightFemurMesh = mesh;
+      }
+
+      scene.add(mesh);
+    }
+
+    function showModel(modelType) {
+      currentModel = modelType;
+
+      if (pelvisMesh) pelvisMesh.visible = false;
+      if (leftFemurMesh) leftFemurMesh.visible = false;
+      if (rightFemurMesh) rightFemurMesh.visible = false;
+
+      switch (modelType) {
+        case 'all':
+          if (pelvisMesh) pelvisMesh.visible = true;
+          if (leftFemurMesh) leftFemurMesh.visible = true;
+          if (rightFemurMesh) rightFemurMesh.visible = true;
+          break;
+        case 'pelvis':
+          if (pelvisMesh) pelvisMesh.visible = true;
+          break;
+        case 'left_femur':
+          if (leftFemurMesh) leftFemurMesh.visible = true;
+          break;
+        case 'right_femur':
+          if (rightFemurMesh) rightFemurMesh.visible = true;
+          break;
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('model-viewer');
+      if (!container || !camera || !renderer) return;
+
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // 模型切换按钮事件
+    document.addEventListener('DOMContentLoaded', function () {
+      const modelButtons = document.querySelectorAll('.model-btn');
+      modelButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          modelButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          const modelType = this.getAttribute('data-model');
+          showModel(modelType);
+        });
+      });
+
+      // 初始化3D查看器
+      init3DViewer();
+    });
+  </script>
+</body>
+
+</html>
